@@ -1,0 +1,53 @@
+package com.conectatarot.backend.controller;
+
+import com.conectatarot.backend.dto.RegistroUsuarioRequest;
+import com.conectatarot.backend.dto.UsuarioResponse;
+import com.conectatarot.backend.entity.Usuario;
+import com.conectatarot.backend.service.UsuarioService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/usuarios")
+public class UsuarioController {
+
+    private final UsuarioService usuarioService;
+
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
+
+    @PostMapping
+    public ResponseEntity<?> registrarUsuario(@RequestBody RegistroUsuarioRequest request) {
+        try {
+
+            // Crear entidad Usuario desde el DTO
+            Usuario usuario = new Usuario();
+            usuario.setNombre(request.getNombre());
+            usuario.setEmail(request.getEmail());
+            usuario.setPassword(request.getPassword());
+
+            // Guardar usuario
+            Usuario usuarioGuardado = usuarioService.registrarUsuario(usuario);
+
+            // Crear response limpio (SIN PASSWORD)
+            UsuarioResponse response = new UsuarioResponse();
+            response.setIdUsuario(usuarioGuardado.getIdUsuario());
+            response.setNombre(usuarioGuardado.getNombre());
+            response.setEmail(usuarioGuardado.getEmail());
+            response.setRol(usuarioGuardado.getRol().getNombreRol());
+            response.setActivo(usuarioGuardado.getActivo());
+            response.setFechaRegistro(
+                    usuarioGuardado.getFechaRegistro() != null
+                            ? usuarioGuardado.getFechaRegistro().toString()
+                            : null
+            );
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
+    }
+}
