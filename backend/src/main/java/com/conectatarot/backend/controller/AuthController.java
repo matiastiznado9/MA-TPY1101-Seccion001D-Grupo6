@@ -23,4 +23,10 @@ public class AuthController {
         LoginResponseDTO response = authService.login(request);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/perfil")
+public ResponseEntity<String> perfil() {
+    return ResponseEntity.ok("Acceso permitido con JWT");
+}
+
 }
