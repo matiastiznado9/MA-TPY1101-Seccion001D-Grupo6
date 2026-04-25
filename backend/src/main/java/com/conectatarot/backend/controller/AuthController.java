@@ -6,10 +6,12 @@ import com.conectatarot.backend.service.AuthService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*")
+
 public class AuthController {
 
     private final AuthService authService;
@@ -27,6 +29,12 @@ public class AuthController {
     @GetMapping("/perfil")
 public ResponseEntity<String> perfil() {
     return ResponseEntity.ok("Acceso permitido con JWT");
+}
+
+    @GetMapping("/admin")
+@PreAuthorize("hasRole('ADMIN')")
+public ResponseEntity<String> adminOnly() {
+    return ResponseEntity.ok("Acceso permitido solo para ADMIN");
 }
 
 }
