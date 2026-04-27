@@ -2,12 +2,10 @@ package com.conectatarot.backend.security;
 
 import com.conectatarot.backend.service.TokenBlacklistService;
 import io.jsonwebtoken.Claims;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -42,15 +40,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
 
-        if(authHeader == null || !authHeader.startsWith("Bearer ")){
-            filterChain.doFilter(request,response);
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
             return;
         }
 
         String token = authHeader.substring(7);
 
-        // TOKEN INVALIDADO
-        if(tokenBlacklistService.isBlacklisted(token)){
+        if (tokenBlacklistService.isBlacklisted(token)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Token invalidado por logout");
             return;
@@ -61,29 +58,25 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         Claims claims = jwtService.extractClaims(token);
         String rol = claims.get("rol", String.class);
 
-        if(email != null &&
-           SecurityContextHolder.getContext().getAuthentication() == null){
+        if (email != null &&
+                SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(
                             email,
                             null,
                             List.of(
-                               new SimpleGrantedAuthority(
-                                   "ROLE_" + rol
-                               )
+                                    new SimpleGrantedAuthority("ROLE_" + rol)
                             )
                     );
 
             authToken.setDetails(
-                    new WebAuthenticationDetailsSource()
-                            .buildDetails(request)
+                    new WebAuthenticationDetailsSource().buildDetails(request)
             );
 
-            SecurityContextHolder.getContext()
-                    .setAuthentication(authToken);
+            SecurityContextHolder.getContext().setAuthentication(authToken);
         }
 
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 }
