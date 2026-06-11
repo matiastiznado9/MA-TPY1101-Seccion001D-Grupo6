@@ -7,8 +7,8 @@
 }
 
 .card {
-  width: 90%;
-  max-width: 400px;
+  width: 100%;
+  max-width: 420px;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   padding: 2rem;
@@ -48,9 +48,34 @@ button {
   color: white;
   font-weight: bold;
   cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+button.secondary {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+button.secondary:hover {
+  background: rgba(255, 255, 255, 0.22);
 }
 
 .error {
   color: #ff6b6b;
   margin-top: 1rem;
+}
+
+.success {
+  color: #2e7d32;
+  margin-top: 1rem;
+}
+
+.login-link,
+.register-link {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+a {
+  color: #bb86fc;
+  text-decoration: none;
 }

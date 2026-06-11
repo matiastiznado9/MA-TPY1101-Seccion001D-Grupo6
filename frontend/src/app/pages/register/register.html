@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="card">
+
+    <h1>🔮 Regístrate</h1>
+    <p class="subtitle">Crea tu cuenta en Conecta Tarot</p>
+
+    <input
+      type="text"
+      placeholder="Nombre completo"
+      [(ngModel)]="nombre"
+    />
+
+    <input
+      type="email"
+      placeholder="Correo electrónico"
+      [(ngModel)]="email"
+    />
+
+    <input
+      type="password"
+      placeholder="Contraseña"
+      [(ngModel)]="password"
+    />
+
+    <input
+      type="password"
+      placeholder="Confirmar contraseña"
+      [(ngModel)]="confirmPassword"
+    />
+
+    <button (click)="register()">Crear cuenta</button>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+    <p class="success" *ngIf="success">{{ success }}</p>
+
+    <p class="login-link">
+      ¿Ya tienes cuenta? <a routerLink="/">Inicia sesión</a>
+    </p>
+
+  </div>
+</div>
